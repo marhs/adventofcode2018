@@ -46,12 +46,12 @@ def analyze_registry(registry):
             if line['action'] == 'wakes':
                 wakes_at = line['minute']
                 state = 'C'
+                schedule = update_schedule(schedule, current_guard_id, falls_at, wakes_at)
             continue
 
         # State C (wakes up)
         if state == 'C':
             # Update schedule
-            schedule = update_schedule(schedule, current_guard_id, falls_at, wakes_at)
             if line['action'] == 'falls':
                 falls_at = line['minute']
                 state = 'B'
@@ -80,15 +80,27 @@ def schedule_winner(schedule):
                key=lambda x: x[1])[0]
 
 
+def schedule_b(schedule):
+    a = [(k, max(v)) for k, v in schedule.items()]
+    return max([(x[0], x[1]) for x in a],
+               key=lambda x: x[1])
+
+
 if __name__ == '__main__':
     input = read_sorted_input('input.txt')[1:]
 
     schedule = analyze_registry(input)
+    pprint(schedule)
+
+    # Part A
     winner = schedule_winner(schedule)
     winner_minute = schedule[winner].index(max(schedule[winner]))
     print(winner * winner_minute)
 
-
+    # Part B
+    winner, m = schedule_b(schedule)
+    winner_minute = schedule[winner].index(m)
+    print(winner * winner_minute)
 """
 {99: [0, 0, 0, 0, 0...], -> 2
  10: [1, 0, 1, 0, 0...]} -> 4
