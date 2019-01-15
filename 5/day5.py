@@ -1,3 +1,6 @@
+from string import ascii_lowercase
+
+
 def check_reaction(a, b):
     """Given two units, check if they react"""
     return (a.lower() == b.lower()) and (a != b)
@@ -33,25 +36,19 @@ def chain_reactions(input, index=0):
         index += 1
 
 
+def generate_polymer_combinations(input):
+    res = {}
+    for letter in ascii_lowercase:
+        new_input = input.replace(letter, '')
+        new_input = new_input.replace(letter.upper(), '')
+        res[letter] = chain_reactions(new_input)
+    return min(res.items(), key=lambda x: x[1])
+
+
 if __name__ == '__main__':
     filename = 'input.txt'
     input = open(filename, 'r').read()[:-1]
+    # Part A
     print(chain_reactions(input))
-
-
-"""
-dabAcCaCBAcCcaDA
-     x
-
-dabAaCBAccaDA
-   vx
-
-dabCBAcaDA
-     vx
-
-var1 = A
-
-bBaA
-
-bB
-"""
+    # Part B
+    print(generate_polymer_combinations(input))
