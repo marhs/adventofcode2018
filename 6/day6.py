@@ -1,6 +1,3 @@
-from string import ascii_uppercase
-
-
 def print_canvas(canvas):
     for row in canvas:
         print(''.join(row))
