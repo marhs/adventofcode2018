@@ -90,7 +90,6 @@ def workload_distributor(task_order, task_restrictions, num_workers):
             if len(restrictions) == 0
         ]
 
-        print(task_to_do)
         for task in task_to_do:
             if ((num_workers - len(busy_workers)) > 0 and
                     len(task_restrictions[task]) == 0):
@@ -100,7 +99,6 @@ def workload_distributor(task_order, task_restrictions, num_workers):
                 break
 
         # Update time
-        print(time, busy_workers, done_tasks)
         time += 1
 
     return time - 1
@@ -115,12 +113,9 @@ if __name__ == "__main__":
 
     # Kahns - Part A
     task_order = kahns_algorithm(restrictions)
-    print(task_order)
 
 
     restrictions = parse_input(input)
-    from pprint import pprint
-    print(restrictions)
     # Workload - Part B
     print(workload_distributor(task_order, restrictions, 5))
 
