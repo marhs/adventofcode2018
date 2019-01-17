@@ -114,7 +114,6 @@ if __name__ == "__main__":
     # Kahns - Part A
     task_order = kahns_algorithm(restrictions)
 
-
     restrictions = parse_input(input)
     # Workload - Part B
     print(workload_distributor(task_order, restrictions, 5))
