@@ -1,6 +1,6 @@
 def print_canvas(canvas):
     for row in canvas:
-        print(''.join(row))
+        print(''.join([' ' + str(x) + ' ' for x in row]))
 
 
 def generate_canvas(x, y, input):
@@ -10,7 +10,7 @@ def generate_canvas(x, y, input):
     return canvas
 
 
-def input_to_coords(input):
+def input_to_coords(input, offset=0):
     """
     (x, y, id)
     """
@@ -19,7 +19,7 @@ def input_to_coords(input):
     counter = 0
     for line in lines:
         x, y = line.split(', ')
-        res.append((int(x), int(y), str(counter)))
+        res.append((int(x)+offset, int(y)+offset, str(counter)))
         counter += 1
     return res
 
@@ -32,7 +32,6 @@ def nearest_point(x, y, initial_points):
     res = {}
     for point in initial_points:
         res[point[2]] = manhattan_distance(x, y, point[0], point[1])
-
     distances = sorted(res.values())
     if distances[0] == distances[1]:
         return '*'
@@ -86,14 +85,47 @@ def generate_neighbours(x, y, x_lim=10, y_lim=10):
     return res
 
 
+# Part b
+
+def calculate_distances(canvas, initial_points):
+    for y in range(len(canvas)):
+        for x in range(len(canvas[y])):
+            distance = total_distance(x, y, initial_points)
+            canvas[y][x] = distance
+    return canvas
+
+
+def total_distance(x, y, initial_points):
+    res = {}
+    for point in initial_points:
+        res[point[2]] = manhattan_distance(x, y, point[0], point[1])
+    distances = sum(res.values())
+    return distances
+
+
+def count_region(canvas):
+    region_size = 0
+    for row in canvas:
+        for elem in row:
+            if elem < 10000:
+                region_size += 1
+    return region_size
+
+
 if __name__ == '__main__':
     filename = 'input.txt'
     input = open(filename, 'r').read()[:-1]
-    points = input_to_coords(input)
-    canvas = generate_canvas(1000, 1000, points)
-    canvas, areas = search_points(canvas, points)
-    infinite_areas = detect_infinite_areas(canvas)
-    print(solution(areas, infinite_areas))
+    points = input_to_coords(input, offset=300)
+    canvas = generate_canvas(800, 800, points)
+
+    # Part a
+    # canvas, areas = search_points(canvas, points)
+    # infinite_areas = detect_infinite_areas(canvas)
+    # print(solution(areas, infinite_areas))
+
+    # Part b
+    canvas = calculate_distances(canvas, points)
+    print(count_region(canvas))
 
 
 """
